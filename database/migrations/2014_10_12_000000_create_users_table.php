@@ -21,6 +21,10 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            $table->string('username')->unique();
+            $table->timestamp('last_login');
+            $table->boolean('is_active');
+            $table->enum('role', ['manager', 'agent']);
         });
     }
 
