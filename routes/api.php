@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApplicantsController;
+use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,15 +16,32 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('/lead')
-    ->controller(ApplicantsController::class)
+
+Route::controller(AuthController::class)
     ->group(function () {
-        Route::get('/', 'index')->name('manager.applicants.index');
-        Route::post('/', 'store')->name('manager.applicants.store');
-        Route::get('/{id}', 'show')->name('manager.applicants.show');
+        Route::post('login', 'login')->name('login');
+
+        Route::middleware('auth:api')
+            ->group(function () {
+
+                Route::post('logout', 'logout')->name('logout');
+                Route::post('refresh', 'refresh')->name('refresh');
+
+                Route::prefix('/lead')
+                    ->controller(ApplicantsController::class)
+                    ->group(function () {
+                        Route::get('/', 'index')->name('manager.applicants.index');
+                        Route::post('/', 'store')->name('manager.applicants.store');
+                        Route::get('/{id}', 'show')->name('manager.applicants.show');
+                    });
+            });
 
     });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
+
+
+
+//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
