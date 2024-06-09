@@ -23,11 +23,8 @@ class ApplicantSeeder extends Seeder
      */
     public function run()
     {
-        // The output
-        $output = new ConsoleOutput();
-
         // creates a new progress bar (10 units)
-        $progressBar = new ProgressBar($output, $this->amount);
+        $progressBar = $this->command->getOutput()->createProgressBar($this->amount);
 
         // starts and displays the progress bar
         $progressBar->start();
