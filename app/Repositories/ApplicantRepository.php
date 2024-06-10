@@ -10,4 +10,9 @@ class ApplicantRepository extends BaseRepository
     {
         parent::__construct($applicant);
     }
+
+    public function allWithOwner()
+    {
+        return Applicant::where("owner", "!=", null)->get();
+    }
 }

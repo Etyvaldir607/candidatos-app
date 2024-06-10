@@ -31,6 +31,10 @@ class ApplicantSeeder extends Seeder
 
         Applicant::factory($this->amount)->make()->each(function ($applicant) use ($progressBar) {
             // advances the progress bar 1 unit
+            if ($this->amount > 5) {
+                $applicant->owner = null;
+            }
+
             if ($applicant->save()) {
                 $progressBar->advance();
             }

@@ -6,7 +6,10 @@ use App\Http\Requests\StoreApplicantRequest;
 use App\Http\Requests\UpdateApplicantRequest;
 use App\Http\Resources\ApplicantResource;
 use App\Models\Applicant;
+use App\Models\User;
 use App\Repositories\ApplicantRepository;
+use Spatie\Permission\Exceptions\UnauthorizedException;
+use Spatie\Permission\Models\Role;
 
 class ApplicantsController extends Controller
 {
@@ -16,6 +19,7 @@ class ApplicantsController extends Controller
     public function __construct(ApplicantRepository $applicantRepositories)
     {
         $this->applicantRepositories = $applicantRepositories;
+        $this->middleware('manager', ['except' => ['index']]);
     }
 
     /**
@@ -26,11 +30,19 @@ class ApplicantsController extends Controller
     public function index()
     {
         try {
-            return response()->apiResponse(
-                ApplicantResource::collection(
-                    $this->applicantRepositories->all()
-                )->all()
-            );
+            if (!auth()->user()->cannot('owner applicant')) {
+                return response()->apiResponse(
+                    ApplicantResource::collection(
+                        $this->applicantRepositories->allWithOwner()
+                    )->all()
+                );
+            } else {
+                return response()->apiResponse(
+                    ApplicantResource::collection(
+                        $this->applicantRepositories->all()
+                    )->all()
+                );
+            }
         } catch (\Exception $e) {
             $status_code = is_integer($e->getCode()) ? $e->getCode() : 500;
             return response()->apiException($e->getMessage(), $status_code);
@@ -50,7 +62,7 @@ class ApplicantsController extends Controller
             $this->applicantRepositories->save($applicant);
             return response()->apiResponse(
                 ApplicantResource::make($applicant)
-            );
+            , 201);
         } catch (\Exception $e) {
             $status_code = is_integer($e->getCode()) ? $e->getCode() : 500;
             return response()->apiException($e->getMessage(), $status_code);

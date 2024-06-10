@@ -18,7 +18,7 @@ class ApplicantResource extends JsonResource
             'id'                    => $this->id,
             'name'                  => $this->name,
             'source'                => $this->source,
-            'owner'                 => $this->owner,
+            'owner'                 => ($this->owner != null) ? $this->owner:null,
             'created_at'            => $this->created_at,
             'created_by'            => $this->created_by,
         ];
