@@ -32,7 +32,9 @@ class AuthController extends Controller
             if (!$token) {
                 throw new UnauthorizedException("Password incorrect for: ". $data['username'], 401);
             }
-            //$user = Auth::user();
+            $user = User::find(Auth::user()->id);
+            $user->last_login = now();
+            $user->save();
             return response()->apiResponse([
                 'token' => $token,
                 'type' => 'bearer',
