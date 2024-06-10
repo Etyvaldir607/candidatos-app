@@ -26,21 +26,6 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        //The output
-        //$output = new ConsoleOutput();
-        //// creates a new progress bar (10 units)
-        //$progressBar = new ProgressBar($output, $this->amount);
-        //// starts and displays the progress bar
-        //$progressBar->start();
-        //User::factory($this->amount)->make()->each(function ($user) use ($progressBar) {
-        //    // advances the progress bar 1 unit
-        //    if ($user->save()) {
-        //        $progressBar->advance();
-        //    }
-        //});
-        //// ensures that the progress bar is at 100%
-        //$progressBar->finish();
-
         $users = [
             [
                 'name' => 'Manager user',
@@ -67,7 +52,22 @@ class UserSeeder extends Seeder
         $progressBar = $this->command->getOutput()->createProgressBar(count($users));
 
         foreach ($users as $user) {
-            User::create($user);
+            $user_created = User::create($user);
+
+            switch ($user_created->username) {
+                case 'user.manager':
+                    $user_created->assignRole('manager');
+                    break;
+
+                case 'user.agent':
+                    $user_created->assignRole('agent');
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+
             $progressBar->advance();
         }
 
