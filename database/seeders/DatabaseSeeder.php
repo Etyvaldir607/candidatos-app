@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
                 PermissionSeeder::class,
                 RoleSeeder::class,
                 UserSeeder::class,
-                ApplicantSeeder::class
+                ApplicantSeeder::class,
+                ApplicantWithoutOwnerSeeder::class
             ]);
         } catch (\Throwable $th) {
             throw $th;

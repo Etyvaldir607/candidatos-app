@@ -24,3 +24,7 @@ password: password
 ## login as agent
 username: user.agent
 password: password
+
+## Init Unit test
+sail test
+

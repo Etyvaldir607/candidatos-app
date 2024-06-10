@@ -30,9 +30,9 @@ Route::controller(AuthController::class)
                 Route::prefix('/lead')
                     ->controller(ApplicantsController::class)
                     ->group(function () {
-                        Route::get('/', 'index')->name('manager.applicants.index');
-                        Route::post('/', 'store')->name('manager.applicants.store');
-                        Route::get('/{id}', 'show')->name('manager.applicants.show');
+                        Route::get('/', 'index')->name('applicants.index');
+                        Route::post('/', 'store')->name('applicants.store');
+                        Route::get('/{id}', 'show')->name('applicants.show');
                     });
             });
 
